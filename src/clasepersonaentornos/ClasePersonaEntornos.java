@@ -16,56 +16,44 @@ public class ClasePersonaEntornos {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        
-        String nombre = "", apellidos = "", fechaNacimiento="";
-        Persona persona = null;
-        int numeroPersonasConFecha, numeroPersonasSinFecha;
-        boolean fechaEsCorrecta = false;
-        
-        numeroPersonasConFecha = sc.nextInt();
-        numeroPersonasSinFecha = sc.nextInt();
+           Scanner sc = new Scanner(System.in);
+
+        String nombre = "", apellidos = "", fechaNacimiento = "", fecha = "";
+
+        int personas, edad;
+
+        personas = sc.nextInt();
         sc.nextLine();
-        for (int i=0; i<numeroPersonasConFecha; i++){
+
+        for (int i = 0; i < personas; i++) {
             nombre = sc.nextLine();
             apellidos = sc.nextLine();
             fechaNacimiento = sc.nextLine();
+
             try {
-                persona = new Persona(nombre, apellidos, fechaNacimiento);
-                System.out.println("Procesado: " + persona.getNombre() + " " + persona.getApellidos() + ", nacido el " + 
-                        persona.getFechaNacimiento().substring(0, 2) + " del " + 
-                        persona.getFechaNacimiento().substring(3, 5) + " de "
-                + persona.getFechaNacimiento().substring(6, fechaNacimiento.length()));
-            } catch (IllegalArgumentException e){
+                Persona persona1 = new Persona(nombre, apellidos, fechaNacimiento);
+                int cantidadFecha = sc.nextInt();
+                sc.nextLine();
+                for (int j = 0; j < cantidadFecha; j++) {
+                    fecha = sc.nextLine();
+                    try {
+                        edad = persona1.getEdadEnFecha(fecha);
+                        if (edad == -1) {
+                            System.out.println(persona1.getNombre() + " " + persona1.getApellidos() + " aun no ha nacido a fecha " + fecha);
+                        } else {
+                            System.out.println(persona1.getNombre() + " " + persona1.getApellidos() + " tendra " + edad + " anyos en fecha " + fecha);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("ERROR. Procesando siguiente fecha");
+                    }
+                }
+
+            } catch (IllegalArgumentException e) {
                 System.out.println("ERROR. Procesando siguiente persona");
-                
             }
+
         }
-        
-        for (int i = 0; i < numeroPersonasSinFecha; i++) {
-            nombre = sc.nextLine();
-            apellidos = sc.nextLine();
-            try {
-                persona = new Persona(nombre, apellidos);
-                System.out.println("Procesado: " + persona.getNombre() + " " + persona.getApellidos() + ", nacido el " + persona.getFechaNacimiento());
-            } catch (IllegalArgumentException ex1) {
-                System.out.println("ERROR. Procesando siguiente persona");
-            }
-        }
-        
-        
-         while (!fechaEsCorrecta) {
-            try {
-                fechaNacimiento = sc.nextLine();
-                persona.setFechaNacimiento(fechaNacimiento);
-                fechaEsCorrecta = true;
-                System.out.println("Procesado: " + persona.getNombre() + " " + persona.getApellidos() + ", nacido el " + persona.getFechaNacimiento().substring(0, 2)
-                        + " del " + persona.getFechaNacimiento().substring(3, 5) + " de " + persona.getFechaNacimiento().substring(6, persona.getFechaNacimiento().length()));
-            } catch (IllegalArgumentException ex1) {
-                System.out.println("Fecha Incorrecta");
-            }
-        }
-        
+
     }
-    
+
 }
