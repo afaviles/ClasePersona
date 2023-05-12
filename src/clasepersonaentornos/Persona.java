@@ -6,12 +6,13 @@ package clasepersonaentornos;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.Period;
 
 /**
  *
  * @author Ángel
  */
-public class  Persona {
+public class Persona {
 
     private String nombre, apellidos;
 
@@ -60,8 +61,6 @@ public class  Persona {
         return fecha;
     }
 
-    
-
     public String getFechaNacimiento() {
         return getFechaNacimiento('-');
     }
@@ -69,27 +68,43 @@ public class  Persona {
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = generarFecha(fechaNacimiento);
     }
-    
+
     public int getEdadEnFecha(String cadenaFecha) {
         int edad;
-        
-        if (this.fechaNacimiento == null){
+
+        if (this.fechaNacimiento == null) {
             return -1;
         }
         LocalDate nuevaFecha = generarFecha(cadenaFecha);
-        
-        try{
+
+        try {
             edad = nuevaFecha.getYear() - this.fechaNacimiento.getYear();
-            if (this.fechaNacimiento.getMonthValue() > nuevaFecha.getMonthValue() || 
-                    (this.fechaNacimiento.getMonthValue() == nuevaFecha.getMonthValue() && 
-                    this.fechaNacimiento.getDayOfMonth() > nuevaFecha.getDayOfMonth())){
-            edad --;
-        }
+            if (this.fechaNacimiento.getMonthValue() > nuevaFecha.getMonthValue()
+                    || (this.fechaNacimiento.getMonthValue() == nuevaFecha.getMonthValue()
+                    && this.fechaNacimiento.getDayOfMonth() > nuevaFecha.getDayOfMonth())) {
+                edad--;
+            }
             return edad;
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return -1;
         }
-        
+    }
+
+    public int getEdad() {
+        int edad;
+
+        if (this.fechaNacimiento == null || (LocalDate.now().isBefore(fechaNacimiento))) {
+            return -1;
+        }
+
+        try {
+            Period periodo = Period.between(fechaNacimiento, LocalDate.now());
+            edad = periodo.getYears();
+            return edad;
+        } catch (IllegalArgumentException e) {
+            return -1;
+        }
+
     }
 
     private LocalDate generarFecha(String fechaDeNacimiento) {
@@ -113,11 +128,5 @@ public class  Persona {
         }
         return fecha;
     }
-    
-    
-    
-    
-    
-    
-    
+
 }
